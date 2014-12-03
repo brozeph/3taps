@@ -1,0 +1,19 @@
+{
+  "name": "3taps",
+  "version": "0.1.0",
+  "description": "Node client for 3taps API",
+  "main": "./lib",
+  "scripts": {
+    "test": "gulp test-all"
+  },
+  "keywords": [
+    "3taps"
+  ],
+  "author": "@brozeph",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-jshint": "^1.9.0",
+    "jshint-stylish": "^1.0.0"
+  }
+}
