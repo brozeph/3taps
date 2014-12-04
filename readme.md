@@ -1,6 +1,6 @@
 # 3taps API Node Client
 
-This is an API client for the 3taps polling, reference and search API endpoints. 
+This is an API client for the 3taps polling, reference and search API endpoints.
 
 ## Getting Started
 
@@ -28,7 +28,7 @@ threeTapsClient.anchor({
 });
 ```
 
-For which the following response will look similar to the following:
+For which the response will look similar to the following:
 
 ```
 {
@@ -49,7 +49,7 @@ threeTapsClient.anchor({
 });
 ```
 
-From which the server will respond with something similar to:
+The library will respond with something similar to:
 
 ```
 {
