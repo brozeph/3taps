@@ -5,29 +5,30 @@ var
 	gulp = require('gulp'),
 	istanbul = require('gulp-istanbul'),
 	jshint = require('gulp-jshint'),
-	mocha = require('gulp-mocha');
+	mocha = require('gulp-mocha'),
+	sequence = require('run-sequence');
 
 
 gulp.task('clean', function (callback) {
-	del(['coverage'], callback);
+	return del(['coverage'], callback);
 });
 
 
 gulp.task('jshint', function () {
 	return gulp
-		.src(['lib/**/*.js', 'test/lib/**/*.js'])
+		.src(['lib/**/*.js', 'test/**/*.js'])
 		.pipe(jshint())
 		.pipe(jshint.reporter('jshint-stylish'))
 });
 
 
-gulp.task('test-all', ['jshint', 'test-coverage'], function () {
-
+gulp.task('test-all', function (callback) {
+	sequence('clean', 'jshint', 'test-coverage', 'test-functional', callback);
 });
 
 
-gulp.task('test-coverage', ['clean'], function (callback) {
-	gulp
+gulp.task('test-coverage', ['clean'], function () {
+	return gulp
 		.src(['./lib/*.js'])
 		.pipe(istanbul())
 		.pipe(istanbul.hookRequire())
@@ -38,10 +39,19 @@ gulp.task('test-coverage', ['clean'], function (callback) {
 					reporter : 'spec'
 				}))
 				.pipe(istanbul.writeReports('./reports'))
-				.on('end', callback);
 		});
 });
 
+
+gulp.task('test-functional', function () {
+	return gulp
+		.src(['./test/functional/**/*.js'], { read : false })
+		.pipe(mocha({
+			checkLeaks : true,
+			reporter : 'spec',
+			ui : 'bdd'
+		}));
+});
 
 gulp.task('test-unit', function () {
 	return gulp
