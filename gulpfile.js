@@ -2,7 +2,9 @@
 
 var
 	gulp = require('gulp'),
-	jshint = require('gulp-jshint');
+	istanbul = require('gulp-istanbul'),
+	jshint = require('gulp-jshint'),
+	mocha = require('gulp-mocha');
 
 
 gulp.task('jshint', function () {
@@ -15,4 +17,19 @@ gulp.task('jshint', function () {
 
 gulp.task('test-all', ['jshint'], function () {
 
+});
+
+
+gulp.task('test-coverage', function (callback) {
+	gulp
+		.src('./lib/**/*.js')
+		.pipe(istanbul())
+		.pipe(istanbul.hookRequire())
+		.on('finish', function () {
+			gulp
+				.src('./test/lib/**/*.js')
+				.pipe(mocha())
+				.pipe(istanbul.writeReports())
+				.end('end', callback);
+		});
 });
