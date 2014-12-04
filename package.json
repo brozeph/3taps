@@ -4,7 +4,7 @@
   "description": "Node client for 3taps API",
   "main": "./lib",
   "scripts": {
-    "test": "gulp test-all"
+    "test": "gulp jshint && gulp test-coverage"
   },
   "keywords": [
     "3taps"
