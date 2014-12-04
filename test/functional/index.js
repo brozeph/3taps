@@ -12,7 +12,7 @@ describe('3taps', function () {
 	'use strict';
 
 	// increase timeout
-	this.timeout(10000);
+	this.timeout(5000);
 
 	var client;
 

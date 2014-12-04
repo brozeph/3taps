@@ -156,5 +156,40 @@ describe('3taps', function () {
 				});
 			});
 		});
+
+
+		describe('#poll', function () {
+			// poll pre-test hook
+			beforeEach(function () {
+				requestReply = {
+					success : true
+				};
+			});
+
+			it('should request correct URL', function (done) {
+				client.poll({
+					anchor : 12345
+				}, function () {
+					should.exist(requestQuery.pathname);
+					requestQuery.pathname.should.equal('/poll');
+
+					return done();
+				});
+			});
+
+			it('should support anchor and source params', function (done) {
+				client.poll({
+					anchor : 12345,
+					source : 'test-source'
+				}, function () {
+					should.exist(requestQuery.pathname);
+					requestQuery.pathname.should.equal('/poll');
+					should.exist(requestQuery.query.anchor);
+					should.exist(requestQuery.query.source);
+
+					return done();
+				});
+			});
+		});
 	});
 });
