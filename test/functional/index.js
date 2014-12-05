@@ -23,7 +23,6 @@ describe('3taps', function () {
 		});
 	});
 
-	//*
 	describe('polling', function () {
 		var anchor;
 
@@ -59,14 +58,12 @@ describe('3taps', function () {
 			});
 		});
 	});
-	//*/
 
-	//*
 	describe('reference', function () {
 		var locationCode;
 
 		describe('#getCategories', function () {
-			it('should successfull retrieve categories', function (done) {
+			it('should successfully retrieve categories', function (done) {
 				client.getCategories(function (err, data) {
 					should.not.exist(err);
 					should.exist(data);
@@ -77,7 +74,7 @@ describe('3taps', function () {
 		});
 
 		describe('#getCategoryGroups', function () {
-			it('should successfull retrieve category groups', function (done) {
+			it('should successfully retrieve category groups', function (done) {
 				client.getCategoryGroups(function (err, data) {
 					should.not.exist(err);
 					should.exist(data);
@@ -88,7 +85,7 @@ describe('3taps', function () {
 		});
 
 		describe('#getDataSources', function () {
-			it('should successfull retrieve data sources', function (done) {
+			it('should successfully retrieve data sources', function (done) {
 				client.getDataSources(function (err, data) {
 					should.not.exist(err);
 					should.exist(data);
@@ -99,7 +96,7 @@ describe('3taps', function () {
 		});
 
 		describe('#getLocations', function () {
-			it('should successfull retrieve locations', function (done) {
+			it('should successfully retrieve locations', function (done) {
 				var options = {
 					level : 'zipcode',
 					city : 'USA-SFO-SNF'
@@ -117,7 +114,7 @@ describe('3taps', function () {
 		});
 
 		describe('#lookupLocation', function () {
-			it('should successfull retrieve location detail', function (done) {
+			it('should successfully retrieve location detail', function (done) {
 				var options = {
 					code : locationCode
 				};
@@ -131,5 +128,24 @@ describe('3taps', function () {
 			});
 		});
 	});
-	//*/
+
+	describe('search', function () {
+		describe('#search', function () {
+			it('should successfully search', function (done) {
+				var options = {
+					'location.city' : 'USA-SFO-SNF',
+					body : 'fixie'
+				};
+
+				client.search(options, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					console.log(JSON.stringify(data, 0, 2));
+
+					return done();
+				});
+			});
+		});
+	});
 });

@@ -416,5 +416,96 @@ describe('3taps', function () {
 				return done();
 			});
 		});
+
+		it('should support all params', function (done) {
+			client.search({
+				category : 'test category',
+				'category_group' : 'test group',
+				'location.city' : 'test city',
+				'location.country' : 'test country',
+				'location.county' : 'test county',
+				'location.locality' : 'test locality',
+				'location.metro' : 'test metro',
+				'location.region' : 'test region',
+				'location.state' : 'test state',
+				'location.zipcode' : 'test zipcode',
+				source : 'test source',
+
+				lat : 100,
+				long : 100,
+				radius : 5,
+
+				annotations : 'test annotation',
+				body : 'test body',
+				currency : 'test currency',
+				'external_id' : 'test id',
+				'has_image' : true,
+				'has_price' : true,
+				heading : 'test',
+				id : 1234,
+				'include_deleted' : true,
+				'only_deleted' : true,
+				price : '100.00',
+				state : 'test',
+				status : 'test',
+				text : 'test',
+				timestamp : 'test',
+
+				anchor : 12345,
+				count : 10,
+				page : 1,
+				retvals : 'test',
+				rpp : 50,
+				sort : 'test',
+				tier : 1
+			}, function (err, data) {
+				should.not.exist(err);
+				should.exist(data);
+
+				should.exist(requestQuery.query);
+
+				should.exist(requestQuery.query.category);
+				should.exist(requestQuery.query['category_group']);
+				should.exist(requestQuery.query['location.city']);
+				should.exist(requestQuery.query['location.country']);
+				should.exist(requestQuery.query['location.county']);
+				should.exist(requestQuery.query['location.locality']);
+				should.exist(requestQuery.query['location.metro']);
+				should.exist(requestQuery.query['location.region']);
+				should.exist(requestQuery.query['location.state']);
+				should.exist(requestQuery.query['location.zipcode']);
+				should.exist(requestQuery.query.source);
+
+				should.exist(requestQuery.query.lat);
+				should.exist(requestQuery.query.long);
+				should.exist(requestQuery.query.radius);
+
+				should.exist(requestQuery.query.annotations);
+				should.exist(requestQuery.query.body);
+				should.exist(requestQuery.query.currency);
+				should.exist(requestQuery.query['external_id']);
+				should.exist(requestQuery.query['has_image']);
+				should.exist(requestQuery.query['has_price']);
+				should.exist(requestQuery.query.heading);
+				should.exist(requestQuery.query.id);
+				should.exist(requestQuery.query['include_deleted']);
+				should.exist(requestQuery.query['only_deleted']);
+				should.exist(requestQuery.query.price);
+				should.exist(requestQuery.query.state);
+				should.exist(requestQuery.query.status);
+				should.exist(requestQuery.query.text);
+				should.exist(requestQuery.query.timestamp);
+
+				should.exist(requestQuery.query.anchor);
+				should.exist(requestQuery.query.count);
+				should.exist(requestQuery.query.page);
+				should.exist(requestQuery.query.retvals);
+				should.exist(requestQuery.query.rpp);
+				should.exist(requestQuery.query.sort);
+				should.exist(requestQuery.query.tier);
+
+				return done();
+			});
+		});
 	});
 });

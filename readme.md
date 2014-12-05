@@ -401,7 +401,140 @@ Which will return data similar to the following:
 
 ### Search API
 
+Search supports a series of parameters that can be passed in the `options` argument. For a full reference, please see the 3taps documentaiton at <http://docs.3taps.com/search_api.html>. Additionally, many of the params support the ability to pass in the logical operators `|` (or) and `-` (not).
 
+Here is a list of all _optional_ options:
+
+#### Reference Filters
+
+* category
+* category_group
+* location.city
+* location.country
+* location.county
+* location.locality
+* location.metro
+* location.region
+* location.state
+* location.zipcode
+* source
+
+#### Geographic Filters
+
+* lat
+* long
+* radius
+
+#### Posting Specific Filters
+
+* annotations
+* body
+* currency
+* external_id
+* has_image
+* has_price
+* heading
+* id
+* include_deleted
+* only_deleted
+* price
+* state
+* status
+* text
+* timestamp
+
+#### Response Shaping
+
+* anchor - Helps in working with the constant changing of pages
+* count - Puts search into count mode, the payload return is shifted considerably
+* page - The page to return
+* retvals - The specific fields in the response (similar to #poll, see 3taps docs for details)
+* rpp - The number of posts per page
+* sort - Sorts results, supports `timestamp`, `-timestamp`, `price`, `-price` and `distance`
+* tier - The tier to return
+
+The following example performs a search for all postings with `fixie` in the body located within San Francisco, California:
+
+```
+var
+  options = {
+    body : 'fixie',
+    'location.city' : 'USA-SFO-SNF'
+  },
+  threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
+
+threeTapsClient.search(
+  options,
+  function (err, data) {
+    // work with location here
+  });
+```
+
+The response is similar to the following:
+
+```
+{
+  "next_page": 1,
+  "time_search": 4.912137985229492,
+  "success": true,
+  "time_taken": 163.88916969299316,
+  "anchor": 1574246415,
+  "time_fetch": 5.389928817749023,
+  "num_matches": 33,
+  "postings": [
+    {
+      "category": "SBIK",
+      "timestamp": 1417790322,
+      "id": 1573798080,
+      "source": "CRAIG",
+      "location": {
+        "city": "USA-SFO-SNF",
+        "geolocation_status": 3,
+        "metro": "USA-SFO",
+        "locality": "USA-SFO-BEN",
+        "country": "USA",
+        "region": "USA-SFO-SAF",
+        "zipcode": "USA-94110",
+        "long": "-122.4158",
+        "county": "USA-CA-SAF",
+        "state": "USA-CA",
+        "lat": "37.74299",
+        "formatted_address": "Bernal Heights Summit, San Francisco, CA 94110, USA",
+        "accuracy": 8
+      },
+      "external_id": "4787190734",
+      "heading": "2013 Ridley Excalibur Road Bike Frame PRICE DROP Or Best Offer",
+      "external_url": "http://sfbay.craigslist.org/sby/bik/4787190734.html"
+    },
+    {
+      "category": "VPAR",
+      "timestamp": 1417790193,
+      "id": 1573694799,
+      "source": "CRAIG",
+      "location": {
+        "city": "USA-SFO-SNF",
+        "geolocation_status": 3,
+        "metro": "USA-SFO",
+        "locality": "USA-SFO-BEN",
+        "country": "USA",
+        "region": "USA-SFO-SAF",
+        "zipcode": "USA-94110",
+        "long": "-122.4158",
+        "county": "USA-CA-SAF",
+        "state": "USA-CA",
+        "lat": "37.74299",
+        "formatted_address": "Bernal Heights Summit, San Francisco, CA 94110, USA",
+        "accuracy": 8
+      },
+      "external_id": "4788044842",
+      "heading": "3T IONIC 25 TEAM STEALTH CARBON SEATPOST",
+      "external_url": "http://sfbay.craigslist.org/sby/bop/4788044842.html"
+    },
+    // more results ...
+  ],
+  "next_tier": 0
+}
+```
 
 ## Development
 
