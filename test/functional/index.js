@@ -141,8 +141,6 @@ describe('3taps', function () {
 					should.not.exist(err);
 					should.exist(data);
 
-					console.log(JSON.stringify(data, 0, 2));
-
 					return done();
 				});
 			});
