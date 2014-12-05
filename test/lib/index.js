@@ -186,6 +186,7 @@ describe('3taps', function () {
 					'category_group' : 'test group',
 					city : 'test city',
 					country : 'test country',
+					county : 'test county',
 					locality : 'test locality',
 					metro : 'test metro',
 					region : 'test region',
@@ -202,6 +203,7 @@ describe('3taps', function () {
 					should.exist(requestQuery.query['category_group']);
 					should.exist(requestQuery.query.city);
 					should.exist(requestQuery.query.country);
+					should.exist(requestQuery.query.county);
 					should.exist(requestQuery.query.locality);
 					should.exist(requestQuery.query.metro);
 					should.exist(requestQuery.query.region);

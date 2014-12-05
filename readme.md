@@ -132,6 +132,7 @@ var options = {
   'category_group' : '', // optional - 3taps category_group code, supports logical operators
   city : '', // optional - desired City, supports logical operators
   country : '', // optional - desired Country code, supports logical operators
+  county : '', // optional - desired County code, supports logical operators
   locality : '', // optional - 3taps Locality code, supports logical operators
   metro : '', // optional - 3taps Metro Area code, supports logical operators
   region : '', // optional - 3taps Region code, supports logical operators
@@ -246,6 +247,25 @@ threeTapsClient.getCategoryGroups(function (err, data) {
 });
 ```
 
+The response will look similar to:
+
+```
+{ category_groups:
+   [ { code: 'AAAA', name: 'Animals' },
+     { code: 'CCCC', name: 'Community' },
+     { code: 'DISP', name: 'Dispatch' },
+     { code: 'SSSS', name: 'For Sale' },
+     { code: 'JJJJ', name: 'Jobs' },
+     { code: 'MMMM', name: 'Mature' },
+     { code: 'PPPP', name: 'Personals' },
+     { code: 'RRRR', name: 'Real Estate' },
+     { code: 'SVCS', name: 'Services' },
+     { code: 'ZZZZ', name: 'Uncategorized' },
+     { code: 'VVVV', name: 'Vehicles' } ],
+  success: true,
+  lastModified: Mon Sep 02 2013 00:34:25 GMT-0700 (PDT) }
+```
+
 #### getDataSources
 
 ```
@@ -256,14 +276,62 @@ threeTapsClient.getDataSources(function (err, data) {
 });
 ```
 
-#### getLocations
+The response will look similar to:
 
 ```
-var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
+{ sources:
+   [ { code: 'APTSD', name: 'Apartments.com' },
+     { code: 'AUTOC', name: 'autotraderclassic.com' },
+     { code: 'AUTOD', name: 'autotrader.com' },
+     { code: 'BKPGE', name: 'Backpage' },
+     { code: 'CARSD', name: 'Cars.com' },
+     { code: 'CCARS', name: 'classiccars.com' },
+     { code: 'CRAIG', name: 'Craigslist' },
+     { code: 'E_BAY', name: 'ebay.com' },
+     { code: 'EBAYM', name: 'Ebay Motors' },
+     { code: 'HMNGS', name: 'Hemmings Motor News' },
+     { code: 'INDEE', name: 'Indeed' },
+     { code: 'RENTD', name: 'Rent.com' } ],
+  success: true,
+  lastModified: Tue Sep 30 2014 00:34:25 GMT-0700 (PDT) }
+```
 
-threeTapsClient.getLocations(function (err, data) {
-  // work with locations here
-});
+#### getLocations
+
+This method requires the parameter `level` which should contain one of the following string values:
+
+* city
+* country
+* county
+* locality
+* metro
+* region
+* state
+* zipcode
+
+Additionally, the results returned can be filtered at the server by passing any of the following parameters:
+
+* city - only includes locations that exist within the specified 3taps city code
+* country - only includes locations that exist within the specified 3taps country code
+* county - only includes locations that exist within the specified 3taps county code
+* locality - only includes locations that exist within the specified 3taps locality code
+* metro - only includes locations that exist within the specified 3taps metro code
+* region - only includes locations that exist within the specified 3taps region code
+* state - only includes locations that exist within the specified 3taps state code
+
+
+```
+var
+  options = {
+    level : ''
+  },
+  threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
+
+threeTapsClient.getLocations(
+  options,
+  function (err, data) {
+    // work with locations here
+  });
 ```
 
 #### lookupLocation
