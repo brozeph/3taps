@@ -198,7 +198,89 @@ The status parameter supports the following values:
 
 ### Reference API
 
+The reference API endpoint in 3taps returns information about `categories`, `category_groups`, `sources` and `locations` in addition to providing the ability to lookup a specific location to retrieve detailed information.
 
+_*Important Note:*_
+
+Periodically, the values from reference API methods will change... they can be cached, but periodically, the lastModified date should be used to determine if a value has been updated. The responses from `#getCategories`, `#getCategoryGroups`, `#getDataSources` and `#getLocations` will contain a `lastModified` field that can be used for this purpose.
+
+#### getCategories
+
+```
+var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
+
+threeTapsClient.getCategories(function (err, data) {
+  // work with categories here
+});
+```
+
+The response will look similar to the following:
+
+```
+{
+  categories: [{
+    code: 'APET',
+    group_code: 'AAAA',
+    group_name: 'Animals',
+    name: 'Pets'
+  }, {
+    code: 'ASUP',
+    group_code: 'AAAA',
+    group_name: 'Animals',
+    name: 'Supplies'
+  }, {
+  // ... more categories, etc.
+  }],
+  success: true,
+  lastModified: Tue Sep 10 2013 00:34:25 GMT-0700 (PDT)
+}
+```
+
+#### getCategoryGroups
+
+```
+var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
+
+threeTapsClient.getCategoryGroups(function (err, data) {
+  // work with category groups here
+});
+```
+
+#### getDataSources
+
+```
+var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
+
+threeTapsClient.getDataSources(function (err, data) {
+  // work with data sources here
+});
+```
+
+#### getLocations
+
+```
+var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
+
+threeTapsClient.getLocations(function (err, data) {
+  // work with locations here
+});
+```
+
+#### lookupLocation
+
+```
+var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
+
+var options = {
+
+};
+
+threeTapsClient.lookupLocation(
+  options,
+  function (err, data) {
+    // work with location here
+  });
+```
 
 ### Search API
 
