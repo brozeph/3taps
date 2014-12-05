@@ -10,19 +10,57 @@ Until then, this library can be included and used via a git link in the dependen
 
 ```
 "dependencies": [
-	"3taps" : "git://bitbucket.org/hashtagsell/3taps.git#master"
+  "3taps" : "git://bitbucket.org/hashtagsell/3taps.git#master"
 ]
 ```
 
+### General Reference
+
+#### Errors
+
+In the event that the 3taps API returns an unsupported HTTP status code (i.e. less than 200 or greater than 299) *or* when the `success` field from the return message is `false`, the callback will contain an error with the following properties:
+
+```
+{
+  requestOptions: {
+    method: 'GET',
+    qs: { auth_token: 'test-api-key', timestamp: 1417789575187 },
+    url: 'https://polling.3taps.com/anchor'
+  },
+  response: {
+    success: false,
+    error: 'example error',
+    request: {
+      body: '',
+      uri: '/anchor?auth_token=test-api-key&timestamp=1417789575187'
+    }
+  },
+  statusCode: 409
+}
+```
+
+#### Options
+
+Options are optional for every method call... the underlying 3taps API may return an error in the event that an expected parameter is missing, however. All parameters can be specified globally when initializing the client library and each initialized parameter value can be overridden in each module method call.
+
 ### Polling API
+
+The polling endpoint supports two specific capabilities: `anchor` and `poll`
 
 #### Anchor
 
+Use this to generate an anchor from a point in time... the timestamp value is supported as a Date value or the number of seconds from Unix epoch (January 1, 1970).
+
 ```
-var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
+var
+  anchorDate = new Date(),
+  threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
+
+// retrieve all postings new in the last hour
+anchorDate.setHours(anchorDate.getHours() - 1);
 
 threeTapsClient.anchor({
-  timestamp : new Date()
+  timestamp : anchorDate
 }, function (err, data) {
   // work with data here
 });
@@ -42,8 +80,8 @@ For which the response will look similar to the following:
 ```
 var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
 
-threeTapsClient.anchor({
-  timestamp : new Date()
+threeTapsClient.poll({
+  anchor : 1570197959
 }, function (err, data) {
   // work with data here
 });
@@ -80,6 +118,91 @@ The library will respond with something similar to:
   ]
 }
 ```
+
+##### Polling Options
+
+Polling supports a series of parameters that can be passed in the `options` argument. For a full reference, please see the 3taps documentaiton at <http://docs.3taps.com/polling_api.html>. Additionally, many of the params support the ability to pass in the logical operators `|` (or) and `-` (not).
+
+Here is an example list of options:
+
+```
+var options = {
+  anchor : 12345, // optional
+  category : '', // optional - 3taps category code, supports logical operators
+  'category_group' : '', // optional - 3taps category_group code, supports logical operators
+  city : '', // optional - desired City, supports logical operators
+  country : '', // optional - desired Country code, supports logical operators
+  locality : '', // optional - 3taps Locality code, supports logical operators
+  metro : '', // optional - 3taps Metro Area code, supports logical operators
+  region : '', // optional - 3taps Region code, supports logical operators
+  retvals : '', // optional - list of fields to return (see below)
+  source : '', // optional - 3taps Data Source code, supports logical operators
+  state : '', // optional - state of the posting (see below), supports logical operators
+  status : '', // optional - status of the posting (see below), supports logical operators
+  zipcode : '' // optional - desired Zip Code, supports logical operators
+};
+
+threeTapsClient.poll(options, function (err, data) {
+  // filtered awesomeness in the data arg
+});
+```
+
+###### retvals
+
+The retvals parameter supports a comma separated list of values from the following:
+
+* id
+* account_id
+* source
+* category
+* category_group
+* location
+* external_id
+* external_url
+* heading
+* body
+* timestamp
+* timestamp_deleted
+* expires
+* language
+* price
+* currency
+* images
+* annotations
+* status
+* state
+* immortal
+* deleted
+* flagged_status
+
+###### state
+
+The state parameter supports the following values:
+
+* available
+* unavailable
+* expired
+
+###### status
+
+The status parameter supports the following values:
+
+* registered
+* for_sale
+* for_hire
+* for_rent
+* wanted
+* lost
+* stolen
+* found
+
+### Reference API
+
+
+
+### Search API
+
+
 
 ## Development
 
