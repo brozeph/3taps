@@ -50,18 +50,13 @@ describe('3taps', function () {
 		});
 
 		requestQuery = {};
+		requestReply = {
+			success : true
+		};
 	});
 
 	// tests for the polling API
 	describe('polling', function () {
-		// polling pre-test hook
-		beforeEach(function () {
-			// setup HTTP request intercepts for polling
-			requestScope = nock('https://polling.3taps.com')
-				.filteringPath(querystringFilter)
-				.get('/anchor')
-				.reply(200, defaultResponse);
-		});
 
 		describe('#anchor', function () {
 			// anchor pre-test hook
@@ -70,14 +65,29 @@ describe('3taps', function () {
 					success : true,
 					anchor : 12345
 				};
+
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://polling.3taps.com')
+					.filteringPath(querystringFilter)
+					.get('/anchor')
+					.reply(200, defaultResponse);
+			});
+
+			it('should accept no options', function (done) {
+				client.anchor(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					return done();
+				});
 			});
 
 			it('should request correct URL', function (done) {
 				client.anchor({
 					timestamp : new Date()
-				}, function () {
-					should.exist(requestQuery.pathname);
-					requestQuery.pathname.should.equal('/anchor');
+				}, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
 
 					return done();
 				});
@@ -86,8 +96,10 @@ describe('3taps', function () {
 			it('should coerce timestamp to seconds', function (done) {
 				client.anchor({
 					timestamp : new Date()
-				}, function (err) {
+				}, function (err, data) {
 					should.not.exist(err);
+					should.exist(data);
+
 					should.exist(requestQuery.query);
 					should.exist(requestQuery.query.timestamp);
 					requestQuery.query.timestamp.should.match(/^\d+$/, 'timestamp value is a number');
@@ -129,20 +141,20 @@ describe('3taps', function () {
 			it('should properly handle error in response', function (done) {
 				nock.cleanAll();
 				requestScope = nock('https://polling.3taps.com')
-				.filteringPath(querystringFilter)
-				.get('/anchor')
-				.reply(200, function (uri, body) {
-					requestReply = {
-						success : false,
-						error : 'test error'
-					};
+					.filteringPath(querystringFilter)
+					.get('/anchor')
+					.reply(200, function (uri, body) {
+						requestReply = {
+							success : false,
+							error : 'test error'
+						};
 
-					requestReply.request = {
-						body : body,
-						uri : uri
-					};
+						requestReply.request = {
+							body : body,
+							uri : uri
+						};
 
-					return requestReply;
+						return requestReply;
 				});
 
 				client.anchor({
@@ -161,19 +173,29 @@ describe('3taps', function () {
 
 
 		describe('#poll', function () {
-			// poll pre-test hook
 			beforeEach(function () {
-				requestReply = {
-					success : true
-				};
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://polling.3taps.com')
+					.filteringPath(querystringFilter)
+					.get('/poll')
+					.reply(200, defaultResponse);
+			});
+
+			it('should accept no options', function (done) {
+				client.poll(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					return done();
+				});
 			});
 
 			it('should request correct URL', function (done) {
 				client.poll({
 					anchor : 12345
-				}, function () {
-					should.exist(requestQuery.pathname);
-					requestQuery.pathname.should.equal('/poll');
+				}, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
 
 					return done();
 				});
@@ -195,9 +217,11 @@ describe('3taps', function () {
 					state : 'test state',
 					status : 'test status',
 					zipcode : 'test zip'
-				}, function () {
-					should.exist(requestQuery.pathname);
-					requestQuery.pathname.should.equal('/poll');
+				}, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					should.exist(requestQuery.query);
 					should.exist(requestQuery.query.anchor);
 					should.exist(requestQuery.query.category);
 					should.exist(requestQuery.query['category_group']);
@@ -215,6 +239,181 @@ describe('3taps', function () {
 
 					return done();
 				});
+			});
+		});
+	});
+
+	describe('reference', function () {
+		describe('#getCategories', function () {
+			beforeEach(function () {
+				var replyHeaders = {
+					'last-modified' : new Date()
+				};
+
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://reference.3taps.com')
+					.filteringPath(querystringFilter)
+					.defaultReplyHeaders(replyHeaders)
+					.get('/categories')
+					.reply(200, defaultResponse);
+			});
+
+			it('should request correct URL', function (done) {
+				client.getCategories(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+					should.exist(data.lastModified);
+
+					return done();
+				});
+			});
+		});
+
+		describe('#getCategoryGroups', function () {
+			beforeEach(function () {
+				var replyHeaders = {
+					'last-modified' : new Date()
+				};
+
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://reference.3taps.com')
+					.filteringPath(querystringFilter)
+					.defaultReplyHeaders(replyHeaders)
+					.get('/category_groups')
+					.reply(200, defaultResponse);
+			});
+
+			it('should request correct URL', function (done) {
+				client.getCategoryGroups(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+					should.exist(data.lastModified);
+
+					return done();
+				});
+			});
+		});
+
+		describe('#getDataSources', function () {
+			beforeEach(function () {
+				var replyHeaders = {
+					'last-modified' : new Date()
+				};
+
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://reference.3taps.com')
+					.filteringPath(querystringFilter)
+					.defaultReplyHeaders(replyHeaders)
+					.get('/sources')
+					.reply(200, defaultResponse);
+			});
+
+			it('should request correct URL', function (done) {
+				client.getDataSources(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+					should.exist(data.lastModified);
+
+					return done();
+				});
+			});
+		});
+
+		describe('#getLocations', function () {
+			beforeEach(function () {
+				var replyHeaders = {
+					'last-modified' : new Date()
+				};
+
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://reference.3taps.com')
+					.filteringPath(querystringFilter)
+					.defaultReplyHeaders(replyHeaders)
+					.get('/locations')
+					.reply(200, defaultResponse);
+			});
+
+			it('should request correct URL', function (done) {
+				client.getLocations(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+					should.exist(data.lastModified);
+
+					return done();
+				});
+			});
+
+			it('should support all params', function (done) {
+				client.getLocations({
+					city : 'test city',
+					country : 'test country',
+					county : 'test county',
+					locality : 'test locality',
+					metro : 'test metro',
+					region : 'test region',
+					state : 'test state',
+					zipcode : 'test zipcode'
+				}, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					should.exist(requestQuery.query);
+					should.exist(requestQuery.query.city);
+					should.exist(requestQuery.query.country);
+					should.exist(requestQuery.query.county);
+					should.exist(requestQuery.query.locality);
+					should.exist(requestQuery.query.metro);
+					should.exist(requestQuery.query.region);
+					should.exist(requestQuery.query.state);
+					should.exist(requestQuery.query.zipcode);
+
+					return done();
+				});
+			});
+		});
+
+		describe('#lookupLocation', function () {
+			beforeEach(function () {
+				var replyHeaders = {
+					'last-modified' : new Date()
+				};
+
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://reference.3taps.com')
+					.filteringPath(querystringFilter)
+					.defaultReplyHeaders(replyHeaders)
+					.get('/locations/lookup')
+					.reply(200, defaultResponse);
+			});
+
+			it('should request correct URL', function (done) {
+				client.lookupLocation(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+					should.exist(data.lastModified);
+
+					return done();
+				});
+			});
+		});
+	});
+
+	describe('search', function () {
+		beforeEach(function () {
+			// setup HTTP request intercepts for polling
+			requestScope = nock('https://search.3taps.com')
+				.filteringPath(querystringFilter)
+				.get('/')
+				.reply(200, defaultResponse);
+		});
+
+		it('should request correct URL', function (done) {
+			var options = {};
+			client.search(options, function (err, data) {
+				should.not.exist(err);
+				should.exist(data);
+
+				return done();
 			});
 		});
 	});
