@@ -4,14 +4,8 @@ This is an API client for the 3taps polling, reference and search API endpoints.
 
 ## Getting Started
 
-Not deployed yet to NPM... intend to publish as an npm module for simple inclusion in various projects.
-
-Until then, this library can be included and used via a git link in the dependencies section of the `package.json` file:
-
 ```
-"dependencies": [
-  "3taps" : "git+https://brozeph@bitbucket.org/hashtagsell/3taps.git#v0.1.1"
-]
+npm install 3taps
 ```
 
 ### General Reference
