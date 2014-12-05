@@ -6,6 +6,10 @@
   "scripts": {
     "test": "gulp jshint && gulp test-coverage"
   },
+  "repository" : {
+    "type": "git",
+    "url": "git@bitbucket.org:hashtagsell/3taps.git"
+  },
   "keywords": [
     "3taps"
   ],
