@@ -1,3 +1,8 @@
+# v0.1.2 - 2014/12/04
+
+* Adding support for Travis-CI
+* Adding support for Coveralls.io
+
 # v0.1.1 - 2014/12/04
 
 * Fleshed out documentation

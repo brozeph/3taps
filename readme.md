@@ -1,10 +1,12 @@
 # 3taps API Node Client
 
+[![Build Status](https://travis-ci.org/brozeph/3taps.svg)](https://travis-ci.org/brozeph/3taps) [![Coverage Status](https://coveralls.io/repos/brozeph/3taps/badge.png)](https://coveralls.io/r/brozeph/3taps)
+
 This is an API client for the 3taps polling, reference and search API endpoints.
 
 ## Getting Started
 
-```
+```bash
 npm install 3taps
 ```
 
@@ -14,7 +16,7 @@ npm install 3taps
 
 In the event that the 3taps API returns an unsupported HTTP status code (i.e. less than 200 or greater than 299) *or* when the `success` field from the return message is `false`, the callback will contain an error with the following properties:
 
-```
+```javascript
 {
   requestOptions: {
     method: 'GET',
@@ -45,7 +47,7 @@ The polling endpoint supports two specific capabilities: `anchor` and `poll`
 
 Use this to generate an anchor from a point in time... the timestamp value is supported as a Date value or the number of seconds from Unix epoch (January 1, 1970).
 
-```
+```javascript
 var
   anchorDate = new Date(),
   threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
@@ -62,7 +64,7 @@ threeTapsClient.anchor({
 
 For which the response will look similar to the following:
 
-```
+```javascript
 {
   success: true,
   anchor: 1570197959
@@ -71,7 +73,7 @@ For which the response will look similar to the following:
 
 #### Poll
 
-```
+```javascript
 var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
 
 threeTapsClient.poll({
@@ -83,7 +85,7 @@ threeTapsClient.poll({
 
 The library will respond with something similar to:
 
-```
+```javascript
 {
   success: true,
   anchor: 124981255,
@@ -119,7 +121,7 @@ Polling supports a series of parameters that can be passed in the `options` argu
 
 Here is an example list of options:
 
-```
+```javascript
 var options = {
   anchor : 12345, // optional
   category : '', // optional - 3taps category code, supports logical operators
@@ -201,7 +203,7 @@ Periodically, the values from reference API methods will change... they can be c
 
 #### getCategories
 
-```
+```javascript
 var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
 
 threeTapsClient.getCategories(function (err, data) {
@@ -211,7 +213,7 @@ threeTapsClient.getCategories(function (err, data) {
 
 The response will look similar to the following:
 
-```
+```javascript
 {
   categories: [{
     code: 'APET',
@@ -233,7 +235,7 @@ The response will look similar to the following:
 
 #### getCategoryGroups
 
-```
+```javascript
 var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
 
 threeTapsClient.getCategoryGroups(function (err, data) {
@@ -243,7 +245,7 @@ threeTapsClient.getCategoryGroups(function (err, data) {
 
 The response will look similar to:
 
-```
+```javascript
 { category_groups:
    [ { code: 'AAAA', name: 'Animals' },
      { code: 'CCCC', name: 'Community' },
@@ -263,7 +265,7 @@ The response will look similar to:
 
 #### getDataSources
 
-```
+```javascript
 var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
 
 threeTapsClient.getDataSources(function (err, data) {
@@ -273,7 +275,7 @@ threeTapsClient.getDataSources(function (err, data) {
 
 The response will look similar to:
 
-```
+```javascript
 { sources:
    [ { code: 'APTSD', name: 'Apartments.com' },
      { code: 'AUTOC', name: 'autotraderclassic.com' },
@@ -317,7 +319,7 @@ Additionally, the results returned can be filtered at the server by passing any 
 
 See the following example to pull zipcodes within San Francisco:
 
-```
+```javascript
 var
   options = {
     level : 'zipcode',
@@ -334,7 +336,7 @@ threeTapsClient.getLocations(
 
 Which returns data similar to the following:
 
-```
+```javascript
 {
   locations: [{
     bounds_max_lat: 37.78933,
@@ -364,7 +366,7 @@ Which returns data similar to the following:
 
 Provides the ability to find the details of a single location based on its code...
 
-```
+```javascript
 var
   options = {
     code : 'USA-94102'
@@ -380,7 +382,7 @@ threeTapsClient.lookupLocation(
 
 Which will return data similar to the following:
 
-```
+```javascript
 { location:
    { bounds_max_lat: 37.78933,
      bounds_max_long: -122.40438,
@@ -449,7 +451,7 @@ Here is a list of all _optional_ options:
 
 The following example performs a search for all postings with `fixie` in the body located within San Francisco, California:
 
-```
+```javascript
 var
   options = {
     body : 'fixie',
@@ -466,7 +468,7 @@ threeTapsClient.search(
 
 The response is similar to the following:
 
-```
+```javascript
 {
   "next_page": 1,
   "time_search": 4.912137985229492,
@@ -536,19 +538,19 @@ The response is similar to the following:
 
 The `package.json` file is wired up to run jshint, unit tests and code coverage reporting, but not functional tests when running `npm test`.
 
-```
+```bash
 npm test
 ```
 
 #### Unit Tests
 
-```
+```bash
 gulp jshint
 ```
 
 #### Unit Tests
 
-```
+```bash
 gulp test-unit
 ```
 
@@ -556,7 +558,7 @@ gulp test-unit
 
 When running test coverage, an istanbul report will be created at `./reports/lcov-report/lib/index.js.html`
 
-```
+```bash
 gulp test-coverage
 open reports/lcov-report/lib/index.js.html
 ```
@@ -565,13 +567,13 @@ open reports/lcov-report/lib/index.js.html
 
 To run functional tests, you'll need to export an environment variable with your 3taps API key:
 
-```
+```bash
 export THREETAPS_APIKEY=my-key-goes-here
 ```
 
 To verify whether your key is properly set, simply echo from the command line:
 
-```
+```bash
 echo $THREETAPS_APIKEY
 ```
 
@@ -579,6 +581,6 @@ _note: You may want to consider adding this to your ~/.bash_profile so that it i
 
 Now, you can run the functional tests using gulp with the following command:
 
-```
+```bash
 gulp test-functional
 ```
