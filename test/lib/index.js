@@ -1,3 +1,5 @@
+/* jshint sub:true */
+
 var
 	// native
 	querystring = require('querystring'),
@@ -177,15 +179,37 @@ describe('3taps', function () {
 				});
 			});
 
-			it('should support anchor and source params', function (done) {
+			it('should support all params', function (done) {
 				client.poll({
 					anchor : 12345,
-					source : 'test-source'
+					category : 'test category',
+					'category_group' : 'test group',
+					city : 'test city',
+					country : 'test country',
+					locality : 'test locality',
+					metro : 'test metro',
+					region : 'test region',
+					retvals : 'val1,val2,val3',
+					source : 'test source',
+					state : 'test state',
+					status : 'test status',
+					zipcode : 'test zip'
 				}, function () {
 					should.exist(requestQuery.pathname);
 					requestQuery.pathname.should.equal('/poll');
 					should.exist(requestQuery.query.anchor);
+					should.exist(requestQuery.query.category);
+					should.exist(requestQuery.query['category_group']);
+					should.exist(requestQuery.query.city);
+					should.exist(requestQuery.query.country);
+					should.exist(requestQuery.query.locality);
+					should.exist(requestQuery.query.metro);
+					should.exist(requestQuery.query.region);
+					should.exist(requestQuery.query.retvals);
 					should.exist(requestQuery.query.source);
+					should.exist(requestQuery.query.state);
+					should.exist(requestQuery.query.status);
+					should.exist(requestQuery.query.zipcode);
 
 					return done();
 				});
