@@ -1,3 +1,5 @@
+/* jshint sub:true */
+
 var
 	// native
 	querystring = require('querystring'),
@@ -48,18 +50,13 @@ describe('3taps', function () {
 		});
 
 		requestQuery = {};
+		requestReply = {
+			success : true
+		};
 	});
 
 	// tests for the polling API
 	describe('polling', function () {
-		// polling pre-test hook
-		beforeEach(function () {
-			// setup HTTP request intercepts for polling
-			requestScope = nock('https://polling.3taps.com')
-				.filteringPath(querystringFilter)
-				.get('/anchor')
-				.reply(200, defaultResponse);
-		});
 
 		describe('#anchor', function () {
 			// anchor pre-test hook
@@ -68,14 +65,29 @@ describe('3taps', function () {
 					success : true,
 					anchor : 12345
 				};
+
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://polling.3taps.com')
+					.filteringPath(querystringFilter)
+					.get('/anchor')
+					.reply(200, defaultResponse);
+			});
+
+			it('should accept no options', function (done) {
+				client.anchor(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					return done();
+				});
 			});
 
 			it('should request correct URL', function (done) {
 				client.anchor({
 					timestamp : new Date()
-				}, function () {
-					should.exist(requestQuery.pathname);
-					requestQuery.pathname.should.equal('/anchor');
+				}, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
 
 					return done();
 				});
@@ -84,8 +96,10 @@ describe('3taps', function () {
 			it('should coerce timestamp to seconds', function (done) {
 				client.anchor({
 					timestamp : new Date()
-				}, function (err) {
+				}, function (err, data) {
 					should.not.exist(err);
+					should.exist(data);
+
 					should.exist(requestQuery.query);
 					should.exist(requestQuery.query.timestamp);
 					requestQuery.query.timestamp.should.match(/^\d+$/, 'timestamp value is a number');
@@ -127,20 +141,20 @@ describe('3taps', function () {
 			it('should properly handle error in response', function (done) {
 				nock.cleanAll();
 				requestScope = nock('https://polling.3taps.com')
-				.filteringPath(querystringFilter)
-				.get('/anchor')
-				.reply(200, function (uri, body) {
-					requestReply = {
-						success : false,
-						error : 'test error'
-					};
+					.filteringPath(querystringFilter)
+					.get('/anchor')
+					.reply(200, function (uri, body) {
+						requestReply = {
+							success : false,
+							error : 'test error'
+						};
 
-					requestReply.request = {
-						body : body,
-						uri : uri
-					};
+						requestReply.request = {
+							body : body,
+							uri : uri
+						};
 
-					return requestReply;
+						return requestReply;
 				});
 
 				client.anchor({
@@ -159,36 +173,338 @@ describe('3taps', function () {
 
 
 		describe('#poll', function () {
-			// poll pre-test hook
 			beforeEach(function () {
-				requestReply = {
-					success : true
-				};
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://polling.3taps.com')
+					.filteringPath(querystringFilter)
+					.get('/poll')
+					.reply(200, defaultResponse);
+			});
+
+			it('should accept no options', function (done) {
+				client.poll(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					return done();
+				});
 			});
 
 			it('should request correct URL', function (done) {
 				client.poll({
 					anchor : 12345
-				}, function () {
-					should.exist(requestQuery.pathname);
-					requestQuery.pathname.should.equal('/poll');
+				}, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
 
 					return done();
 				});
 			});
 
-			it('should support anchor and source params', function (done) {
+			it('should support all params', function (done) {
 				client.poll({
 					anchor : 12345,
-					source : 'test-source'
-				}, function () {
-					should.exist(requestQuery.pathname);
-					requestQuery.pathname.should.equal('/poll');
+					category : 'test category',
+					'category_group' : 'test group',
+					city : 'test city',
+					country : 'test country',
+					county : 'test county',
+					locality : 'test locality',
+					metro : 'test metro',
+					region : 'test region',
+					retvals : 'val1,val2,val3',
+					source : 'test source',
+					state : 'test state',
+					status : 'test status',
+					zipcode : 'test zip'
+				}, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					should.exist(requestQuery.query);
 					should.exist(requestQuery.query.anchor);
+					should.exist(requestQuery.query.category);
+					should.exist(requestQuery.query['category_group']);
+					should.exist(requestQuery.query.city);
+					should.exist(requestQuery.query.country);
+					should.exist(requestQuery.query.county);
+					should.exist(requestQuery.query.locality);
+					should.exist(requestQuery.query.metro);
+					should.exist(requestQuery.query.region);
+					should.exist(requestQuery.query.retvals);
 					should.exist(requestQuery.query.source);
+					should.exist(requestQuery.query.state);
+					should.exist(requestQuery.query.status);
+					should.exist(requestQuery.query.zipcode);
 
 					return done();
 				});
+			});
+		});
+	});
+
+	describe('reference', function () {
+		describe('#getCategories', function () {
+			beforeEach(function () {
+				var replyHeaders = {
+					'last-modified' : new Date()
+				};
+
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://reference.3taps.com')
+					.filteringPath(querystringFilter)
+					.defaultReplyHeaders(replyHeaders)
+					.get('/categories')
+					.reply(200, defaultResponse);
+			});
+
+			it('should request correct URL', function (done) {
+				client.getCategories(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+					should.exist(data.lastModified);
+
+					return done();
+				});
+			});
+		});
+
+		describe('#getCategoryGroups', function () {
+			beforeEach(function () {
+				var replyHeaders = {
+					'last-modified' : new Date()
+				};
+
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://reference.3taps.com')
+					.filteringPath(querystringFilter)
+					.defaultReplyHeaders(replyHeaders)
+					.get('/category_groups')
+					.reply(200, defaultResponse);
+			});
+
+			it('should request correct URL', function (done) {
+				client.getCategoryGroups(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+					should.exist(data.lastModified);
+
+					return done();
+				});
+			});
+		});
+
+		describe('#getDataSources', function () {
+			beforeEach(function () {
+				var replyHeaders = {
+					'last-modified' : new Date()
+				};
+
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://reference.3taps.com')
+					.filteringPath(querystringFilter)
+					.defaultReplyHeaders(replyHeaders)
+					.get('/sources')
+					.reply(200, defaultResponse);
+			});
+
+			it('should request correct URL', function (done) {
+				client.getDataSources(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+					should.exist(data.lastModified);
+
+					return done();
+				});
+			});
+		});
+
+		describe('#getLocations', function () {
+			beforeEach(function () {
+				var replyHeaders = {
+					'last-modified' : new Date()
+				};
+
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://reference.3taps.com')
+					.filteringPath(querystringFilter)
+					.defaultReplyHeaders(replyHeaders)
+					.get('/locations')
+					.reply(200, defaultResponse);
+			});
+
+			it('should request correct URL', function (done) {
+				client.getLocations(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+					should.exist(data.lastModified);
+
+					return done();
+				});
+			});
+
+			it('should support all params', function (done) {
+				client.getLocations({
+					city : 'test city',
+					country : 'test country',
+					county : 'test county',
+					locality : 'test locality',
+					metro : 'test metro',
+					region : 'test region',
+					state : 'test state',
+					zipcode : 'test zipcode'
+				}, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					should.exist(requestQuery.query);
+					should.exist(requestQuery.query.city);
+					should.exist(requestQuery.query.country);
+					should.exist(requestQuery.query.county);
+					should.exist(requestQuery.query.locality);
+					should.exist(requestQuery.query.metro);
+					should.exist(requestQuery.query.region);
+					should.exist(requestQuery.query.state);
+					should.exist(requestQuery.query.zipcode);
+
+					return done();
+				});
+			});
+		});
+
+		describe('#lookupLocation', function () {
+			beforeEach(function () {
+				var replyHeaders = {
+					'last-modified' : new Date()
+				};
+
+				// setup HTTP request intercepts for polling
+				requestScope = nock('https://reference.3taps.com')
+					.filteringPath(querystringFilter)
+					.defaultReplyHeaders(replyHeaders)
+					.get('/locations/lookup')
+					.reply(200, defaultResponse);
+			});
+
+			it('should request correct URL', function (done) {
+				client.lookupLocation(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+					should.exist(data.lastModified);
+
+					return done();
+				});
+			});
+		});
+	});
+
+	describe('search', function () {
+		beforeEach(function () {
+			// setup HTTP request intercepts for polling
+			requestScope = nock('https://search.3taps.com')
+				.filteringPath(querystringFilter)
+				.get('/')
+				.reply(200, defaultResponse);
+		});
+
+		it('should request correct URL', function (done) {
+			var options = {};
+			client.search(options, function (err, data) {
+				should.not.exist(err);
+				should.exist(data);
+
+				return done();
+			});
+		});
+
+		it('should support all params', function (done) {
+			client.search({
+				category : 'test category',
+				'category_group' : 'test group',
+				'location.city' : 'test city',
+				'location.country' : 'test country',
+				'location.county' : 'test county',
+				'location.locality' : 'test locality',
+				'location.metro' : 'test metro',
+				'location.region' : 'test region',
+				'location.state' : 'test state',
+				'location.zipcode' : 'test zipcode',
+				source : 'test source',
+
+				lat : 100,
+				long : 100,
+				radius : 5,
+
+				annotations : 'test annotation',
+				body : 'test body',
+				currency : 'test currency',
+				'external_id' : 'test id',
+				'has_image' : true,
+				'has_price' : true,
+				heading : 'test',
+				id : 1234,
+				'include_deleted' : true,
+				'only_deleted' : true,
+				price : '100.00',
+				state : 'test',
+				status : 'test',
+				text : 'test',
+				timestamp : 'test',
+
+				anchor : 12345,
+				count : 10,
+				page : 1,
+				retvals : 'test',
+				rpp : 50,
+				sort : 'test',
+				tier : 1
+			}, function (err, data) {
+				should.not.exist(err);
+				should.exist(data);
+
+				should.exist(requestQuery.query);
+
+				should.exist(requestQuery.query.category);
+				should.exist(requestQuery.query['category_group']);
+				should.exist(requestQuery.query['location.city']);
+				should.exist(requestQuery.query['location.country']);
+				should.exist(requestQuery.query['location.county']);
+				should.exist(requestQuery.query['location.locality']);
+				should.exist(requestQuery.query['location.metro']);
+				should.exist(requestQuery.query['location.region']);
+				should.exist(requestQuery.query['location.state']);
+				should.exist(requestQuery.query['location.zipcode']);
+				should.exist(requestQuery.query.source);
+
+				should.exist(requestQuery.query.lat);
+				should.exist(requestQuery.query.long);
+				should.exist(requestQuery.query.radius);
+
+				should.exist(requestQuery.query.annotations);
+				should.exist(requestQuery.query.body);
+				should.exist(requestQuery.query.currency);
+				should.exist(requestQuery.query['external_id']);
+				should.exist(requestQuery.query['has_image']);
+				should.exist(requestQuery.query['has_price']);
+				should.exist(requestQuery.query.heading);
+				should.exist(requestQuery.query.id);
+				should.exist(requestQuery.query['include_deleted']);
+				should.exist(requestQuery.query['only_deleted']);
+				should.exist(requestQuery.query.price);
+				should.exist(requestQuery.query.state);
+				should.exist(requestQuery.query.status);
+				should.exist(requestQuery.query.text);
+				should.exist(requestQuery.query.timestamp);
+
+				should.exist(requestQuery.query.anchor);
+				should.exist(requestQuery.query.count);
+				should.exist(requestQuery.query.page);
+				should.exist(requestQuery.query.retvals);
+				should.exist(requestQuery.query.rpp);
+				should.exist(requestQuery.query.sort);
+				should.exist(requestQuery.query.tier);
+
+				return done();
 			});
 		});
 	});
