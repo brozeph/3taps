@@ -233,7 +233,7 @@ The response will look similar to the following:
   // ... more categories, etc.
   }],
   success: true,
-  lastModified: Tue Sep 10 2013 00:34:25 GMT-0700 (PDT)
+  lastModified: 'Tue Sep 10 2013 00:34:25 GMT-0700 (PDT)'
 }
 ```
 
@@ -263,7 +263,8 @@ The response will look similar to:
      { code: 'ZZZZ', name: 'Uncategorized' },
      { code: 'VVVV', name: 'Vehicles' } ],
   success: true,
-  lastModified: Mon Sep 02 2013 00:34:25 GMT-0700 (PDT) }
+  lastModified: 'Mon Sep 02 2013 00:34:25 GMT-0700 (PDT)'
+}
 ```
 
 #### getDataSources
@@ -293,7 +294,8 @@ The response will look similar to:
      { code: 'INDEE', name: 'Indeed' },
      { code: 'RENTD', name: 'Rent.com' } ],
   success: true,
-  lastModified: Tue Sep 30 2014 00:34:25 GMT-0700 (PDT) }
+  lastModified: 'Tue Sep 30 2014 00:34:25 GMT-0700 (PDT)'
+}
 ```
 
 #### getLocations
@@ -319,11 +321,13 @@ Additionally, the results returned can be filtered at the server by passing any 
 * region - only includes locations that exist within the specified 3taps region code
 * state - only includes locations that exist within the specified 3taps state code
 
+See the following example to pull zipcodes within San Francisco:
 
 ```
 var
   options = {
-    level : ''
+    level : 'zipcode',
+    city : 'USA-SFO-SNF'
   },
   threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
 
@@ -334,20 +338,65 @@ threeTapsClient.getLocations(
   });
 ```
 
-#### lookupLocation
+Which returns data similar to the following:
 
 ```
-var threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
+{
+  locations: [{
+    bounds_max_lat: 37.78933,
+    bounds_max_long: -122.40438,
+    bounds_min_lat: 37.76963,
+    bounds_min_long: -122.42968,
+    code: 'USA-94102',
+    full_name: '94102',
+    short_name: '94102'
+   }, {
+    bounds_max_lat: 37.78823,
+    bounds_max_long: -122.39768,
+    bounds_min_lat: 37.76453,
+    bounds_min_long: -122.42615,
+    code: 'USA-94103',
+    full_name: '94103',
+    short_name: '94103'
+  }, {
+    // more results here...
+  }],
+  success: true,
+  lastModified: 'Mon Sep 02 2013 00:34:25 GMT-0700 (PDT)'
+}
+```
 
-var options = {
+#### lookupLocation
 
-};
+Provides the ability to find the details of a single location based on its code...
+
+```
+var
+  options = {
+    code : 'USA-94102'
+  },
+  threeTapsClient = require('3taps')({ apikey : 'my-api-key' });
 
 threeTapsClient.lookupLocation(
   options,
   function (err, data) {
     // work with location here
   });
+```
+
+Which will return data similar to the following:
+
+```
+{ location:
+   { bounds_max_lat: 37.78933,
+     bounds_max_long: -122.40438,
+     bounds_min_lat: 37.76963,
+     bounds_min_long: -122.42968,
+     code: 'USA-94102',
+     full_name: '94102',
+     level: 'zipcode',
+     short_name: '94102' },
+  success: true }
 ```
 
 ### Search API

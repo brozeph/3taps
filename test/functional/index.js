@@ -18,17 +18,19 @@ describe('3taps', function () {
 
 	beforeEach(function () {
 		client = threeTaps({
-			apikey : process.env.THREETAPS_APIKEY
+			apikey : process.env.THREETAPS_APIKEY,
+			strictSSL : false
 		});
 	});
 
+	//*
 	describe('polling', function () {
 		var anchor;
 
 		describe('#anchor', function () {
 			it('should successsfully retrieve an anchor', function (done) {
 				var options = { timestamp : new Date() };
-				options.timestamp.setHours(options.timestamp.getHours() - 1); // an hour ago
+				options.timestamp.setSeconds(options.timestamp.getSeconds() - 60); // a minute ago
 
 				client.anchor(options, function (err, data) {
 					should.not.exist(err);
@@ -38,8 +40,6 @@ describe('3taps', function () {
 
 					// hang on to this for subsequent requests
 					anchor = data.anchor;
-
-					console.log(data);
 
 					return done();
 				});
@@ -53,11 +53,83 @@ describe('3taps', function () {
 				client.poll(options, function (err, data) {
 					should.not.exist(err);
 					should.exist(data);
-					data.success.should.equal(true);
 
 					return done();
 				});
 			});
 		});
 	});
+	//*/
+
+	//*
+	describe('reference', function () {
+		var locationCode;
+
+		describe('#getCategories', function () {
+			it('should successfull retrieve categories', function (done) {
+				client.getCategories(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					return done();
+				});
+			});
+		});
+
+		describe('#getCategoryGroups', function () {
+			it('should successfull retrieve category groups', function (done) {
+				client.getCategoryGroups(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					return done();
+				});
+			});
+		});
+
+		describe('#getDataSources', function () {
+			it('should successfull retrieve data sources', function (done) {
+				client.getDataSources(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					return done();
+				});
+			});
+		});
+
+		describe('#getLocations', function () {
+			it('should successfull retrieve locations', function (done) {
+				var options = {
+					level : 'zipcode',
+					city : 'USA-SFO-SNF'
+				};
+
+				client.getLocations(options, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					locationCode = data.locations[0].code;
+
+					return done();
+				});
+			});
+		});
+
+		describe('#lookupLocation', function () {
+			it('should successfull retrieve location detail', function (done) {
+				var options = {
+					code : locationCode
+				};
+
+				client.lookupLocation(options, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					return done();
+				});
+			});
+		});
+	});
+	//*/
 });
