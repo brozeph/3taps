@@ -1,6 +1,6 @@
 # 3taps API Node Client
 
-[![Build Status](https://travis-ci.org/brozeph/3taps.svg)](https://travis-ci.org/brozeph/3taps) [![Coverage Status](https://coveralls.io/repos/brozeph/3taps/badge.png)](https://coveralls.io/r/brozeph/3taps)
+[![Build Status](https://travis-ci.org/brozeph/3taps.svg)](https://travis-ci.org/brozeph/3taps) [![Coverage Status](https://img.shields.io/coveralls/brozeph/3taps.svg)](https://coveralls.io/r/brozeph/3taps?branch=master)
 
 This is an API client for the 3taps polling, reference and search API endpoints.
 
