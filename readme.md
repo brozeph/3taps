@@ -10,7 +10,7 @@ Until then, this library can be included and used via a git link in the dependen
 
 ```
 "dependencies": [
-  "3taps" : "git://bitbucket.org/hashtagsell/3taps.git#master"
+  "3taps" : "git://bitbucket.org/hashtagsell/3taps.git#v0.1.1"
 ]
 ```
 
