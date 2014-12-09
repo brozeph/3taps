@@ -206,17 +206,18 @@ describe('3taps', function () {
 					anchor : 12345,
 					category : 'test category',
 					'category_group' : 'test group',
-					city : 'test city',
-					country : 'test country',
-					county : 'test county',
-					locality : 'test locality',
-					metro : 'test metro',
-					region : 'test region',
+					'location.city' : 'test city',
+					'location.country' : 'test country',
+					'location.county' : 'test county',
+					'location.locality' : 'test locality',
+					'location.metro' : 'test metro',
+					'location.region' : 'test region',
+					'location.state' : 'test state',
+					'location.zipcode' : 'test zip',
 					retvals : 'val1,val2,val3',
 					source : 'test source',
 					state : 'test state',
-					status : 'test status',
-					zipcode : 'test zip'
+					status : 'test status'
 				}, function (err, data) {
 					should.not.exist(err);
 					should.exist(data);
@@ -225,17 +226,18 @@ describe('3taps', function () {
 					should.exist(requestQuery.query.anchor);
 					should.exist(requestQuery.query.category);
 					should.exist(requestQuery.query['category_group']);
-					should.exist(requestQuery.query.city);
-					should.exist(requestQuery.query.country);
-					should.exist(requestQuery.query.county);
-					should.exist(requestQuery.query.locality);
-					should.exist(requestQuery.query.metro);
-					should.exist(requestQuery.query.region);
+					should.exist(requestQuery.query['location.city']);
+					should.exist(requestQuery.query['location.country']);
+					should.exist(requestQuery.query['location.county']);
+					should.exist(requestQuery.query['location.locality']);
+					should.exist(requestQuery.query['location.metro']);
+					should.exist(requestQuery.query['location.region']);
+					should.exist(requestQuery.query['location.state']);
+					should.exist(requestQuery.query['location.zipcode']);
 					should.exist(requestQuery.query.retvals);
 					should.exist(requestQuery.query.source);
 					should.exist(requestQuery.query.state);
 					should.exist(requestQuery.query.status);
-					should.exist(requestQuery.query.zipcode);
 
 					return done();
 				});

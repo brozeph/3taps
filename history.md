@@ -1,3 +1,7 @@
+# v0.1.3 - 2014/12/09
+
+* Fixing defect in #poll method where location parameters were not properly parsed or sent
+
 # v0.1.2 - 2014/12/04
 
 * Adding support for Travis-CI
