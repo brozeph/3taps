@@ -1,3 +1,10 @@
+# v0.1.4 - 2014/12/30
+
+* Methods #poll and #search optionally accept retvals parameter as an array
+* Methods #poll and #search optionally accept location parameters as an object
+* Increasing unit test code coverage
+* Updated gulp development dependency and tightened up jshint
+
 # v0.1.3 - 2014/12/09
 
 * Fixing defect in #poll method where location parameters were not properly parsed or sent
