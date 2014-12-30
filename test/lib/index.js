@@ -55,6 +55,14 @@ describe('3taps', function () {
 		};
 	});
 
+	// test constructor
+	it('should accept null or empty options', function() {
+		client = threeTaps();
+
+		should.exist(client);
+		should.exist(client.options);
+	});
+
 	// tests for the polling API
 	describe('polling', function () {
 
@@ -196,6 +204,49 @@ describe('3taps', function () {
 				}, function (err, data) {
 					should.not.exist(err);
 					should.exist(data);
+
+					return done();
+				});
+			});
+
+			it('should accept retvals param as an array', function (done) {
+				client.poll({
+					retvals : ['one', 'two', 'three']
+				}, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					should.exist(requestQuery.query.retvals);
+					requestQuery.query.retvals.should.equal('one,two,three');
+
+					return done();
+				});
+			});
+
+			it('should support location as sub-object', function (done) {
+				client.poll({
+					location : {
+						city : 'test city',
+						country : 'test country',
+						county : 'test county',
+						locality : 'test locality',
+						metro : 'test metro',
+						region : 'test region',
+						state : 'test state',
+						zipcode : 'test zip'
+					}
+				}, function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					should.exist(requestQuery.query['location.city']);
+					should.exist(requestQuery.query['location.country']);
+					should.exist(requestQuery.query['location.county']);
+					should.exist(requestQuery.query['location.locality']);
+					should.exist(requestQuery.query['location.metro']);
+					should.exist(requestQuery.query['location.region']);
+					should.exist(requestQuery.query['location.state']);
+					should.exist(requestQuery.query['location.zipcode']);
 
 					return done();
 				});
@@ -419,6 +470,58 @@ describe('3taps', function () {
 			});
 		});
 
+		it('should search without options', function (done) {
+			client.search(function (err, data) {
+				should.not.exist(err);
+				should.exist(data);
+
+				return done();
+			});
+		});
+
+		it('should accept retvals param as an array', function (done) {
+			client.search({
+				retvals : ['one', 'two', 'three']
+			}, function (err, data) {
+				should.not.exist(err);
+				should.exist(data);
+
+				should.exist(requestQuery.query.retvals);
+				requestQuery.query.retvals.should.equal('one,two,three');
+
+				return done();
+			});
+		});
+
+		it('should support location as sub-object', function (done) {
+			client.search({
+				location : {
+					city : 'test city',
+					country : 'test country',
+					county : 'test county',
+					locality : 'test locality',
+					metro : 'test metro',
+					region : 'test region',
+					state : 'test state',
+					zipcode : 'test zip'
+				}
+			}, function (err, data) {
+				should.not.exist(err);
+				should.exist(data);
+
+				should.exist(requestQuery.query['location.city']);
+				should.exist(requestQuery.query['location.country']);
+				should.exist(requestQuery.query['location.county']);
+				should.exist(requestQuery.query['location.locality']);
+				should.exist(requestQuery.query['location.metro']);
+				should.exist(requestQuery.query['location.region']);
+				should.exist(requestQuery.query['location.state']);
+				should.exist(requestQuery.query['location.zipcode']);
+
+				return done();
+			});
+		});
+
 		it('should support all params', function (done) {
 			client.search({
 				category : 'test category',
@@ -456,7 +559,7 @@ describe('3taps', function () {
 				anchor : 12345,
 				count : 10,
 				page : 1,
-				retvals : 'test',
+				retvals : 'one,two,three',
 				rpp : 50,
 				sort : 'test',
 				tier : 1
