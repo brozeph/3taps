@@ -55,12 +55,49 @@ describe('3taps', function () {
 		};
 	});
 
-	// test constructor
-	it('should accept null or empty options', function() {
-		client = threeTaps();
+	describe('constructor', function () {
+		// test constructor
+		it('should accept null or empty options', function() {
+			client = threeTaps();
 
-		should.exist(client);
-		should.exist(client.options);
+			should.exist(client);
+			should.exist(client.options);
+		});
+
+		it('should default maxRetryCount to 3', function () {
+			client = threeTaps();
+
+			should.exist(client.options.maxRetryCount);
+			client.options.maxRetryCount.should.equal(0);
+		});
+
+		it('should properly retry on failure', function (done) {
+			requestScope = nock('https://polling.3taps.com')
+				.filteringPath(querystringFilter)
+				.get('/anchor')
+				.times(2)
+				.reply(409, { error : 'testing failure' })
+				.get('/anchor')
+				.reply(200, defaultResponse);
+
+			client = threeTaps({ maxRetryCount : 2 });
+
+			client.anchor(function (err, data) {
+				should.exist(err);
+				should.not.exist(data);
+
+				should.exist(err.response);
+				should.exist(err.response.error);
+				err.response.error.should.equal('testing failure');
+
+				client.anchor(function (err, data) {
+					should.not.exist(err);
+					should.exist(data);
+
+					return done();
+				});
+			});
+		});
 	});
 
 	// tests for the polling API
