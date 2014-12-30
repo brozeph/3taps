@@ -1,3 +1,7 @@
+# v0.1.6 - 2014/12/30
+
+* Bugfix - now properly obeying `timeout` option when supplied for each API call
+
 # v0.1.5 - 2014/12/30
 
 * Added support for request retry in the event of an error using constructor option: `maxRetryCount`
