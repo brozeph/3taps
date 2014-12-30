@@ -1,3 +1,8 @@
+# v0.1.5 - 2014/12/30
+
+* Added support for request retry in the event of an error using constructor option: `maxRetryCount`
+* Enhanced documentation for readme
+
 # v0.1.4 - 2014/12/30
 
 * Methods #poll and #search optionally accept retvals parameter as an array

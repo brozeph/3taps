@@ -39,6 +39,22 @@ In the event that the 3taps API returns an unsupported HTTP status code (i.e. le
 
 Options are optional for every method call... the underlying 3taps API may return an error in the event that an expected parameter is missing, however. All parameters can be specified globally when initializing the client library and each initialized parameter value can be overridden in each module method call.
 
+##### Base Constructor Options
+
+The following options are required when creating the client library:
+
+* `apikey` : the API key for access to the 3taps API
+
+The following options are optional when creating the client library:
+
+* `maxRetryCount` : _defaults to 0_ - the number of retries in the event that any error is returned when calling the API
+* `pollingUrl` : _defaults to_ https://polling.3taps.com
+* `referenceUrl` : _defaults to_ https://reference.3taps.com
+* `searchUrl` : _defaults to_ https://search.3taps.com
+* `strictSSL` : _defaults to true_
+* `timeout` : _defaults to 10000 (10 seconds)_
+
+
 ### Polling API
 
 The polling endpoint supports two specific capabilities: `anchor` and `poll`
