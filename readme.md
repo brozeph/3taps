@@ -126,15 +126,17 @@ var options = {
   anchor : 12345, // optional
   category : '', // optional - 3taps category code, supports logical operators
   'category_group' : '', // optional - 3taps category_group code, supports logical operators
-  'location.city' : '', // optional - desired City, supports logical operators
-  'location.country' : '', // optional - desired Country code, supports logical operators
-  'location.county' : '', // optional - desired County code, supports logical operators
-  'location.locality' : '', // optional - 3taps Locality code, supports logical operators
-  'location.metro' : '', // optional - 3taps Metro Area code, supports logical operators
-  'location.region' : '', // optional - 3taps Region code, supports logical operators
-  'location.state' : '', // optional - 3taps City code, supports logical operators
-  'location.zipcode' : '', // optional - desired Zip Code, supports logical operators
-  retvals : '', // optional - list of fields to return (see below)
+  'location' : {
+    'city' : '', // optional - desired City, supports logical operators
+    'country' : '', // optional - desired Country code, supports logical operators
+    'county' : '', // optional - desired County code, supports logical operators
+    'locality' : '', // optional - 3taps Locality code, supports logical operators
+    'metro' : '', // optional - 3taps Metro Area code, supports logical operators
+    'region' : '', // optional - 3taps Region code, supports logical operators
+    'state' : '', // optional - 3taps City code, supports logical operators
+    'zipcode' : '' // optional - desired Zip Code, supports logical operators
+  },
+  retvals : [''], // optional - list of fields to return (see below)
   source : '', // optional - 3taps Data Source code, supports logical operators
   state : '', // optional - state of the posting (see below), supports logical operators
   status : '' // optional - status of the posting (see below), supports logical operators
@@ -147,7 +149,7 @@ threeTapsClient.poll(options, function (err, data) {
 
 ###### retvals
 
-The retvals parameter supports a comma separated list of values from the following:
+The retvals parameter supports an array or a comma separated list of values from the following:
 
 * id
 * account_id
