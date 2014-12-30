@@ -75,7 +75,7 @@ describe('3taps', function () {
 			requestScope = nock('https://polling.3taps.com')
 				.filteringPath(querystringFilter)
 				.get('/anchor')
-				.twice()
+				.times(2)
 				.reply(409, { error : 'testing failure' })
 				.get('/anchor')
 				.reply(200, defaultResponse);
