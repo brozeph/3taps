@@ -1,6 +1,6 @@
 {
   "name": "3taps",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Node client for 3taps API",
   "main": "./lib",
   "scripts": {
